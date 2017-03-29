@@ -71,5 +71,25 @@ public class Stoner {
     }
   }
 
+  public void updateName(String name) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE stoners SET name = :name WHERE id = :id;";
+      con.createQuery(sql)
+      .addParameter("name", name)
+      .addParameter("id", this.id)
+      .executeUpdate();
+    }
+  }
 
+  public void updateFavoriteStrain(String strain) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE stoners SET favorite_strain = :favorite_strain WHERE id = :id;";
+      con.createQuery(sql)
+      .addParameter("favorite_strain", strain)
+      .addParameter("id", this.id)
+      .executeUpdate();
+    }
+  }
+
+  
 }
