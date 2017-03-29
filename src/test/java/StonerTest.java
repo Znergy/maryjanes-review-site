@@ -23,11 +23,12 @@ public class StonerTest {
     assertEquals("Creed", stoner.getName());
   }
 
-  // test for id getter
+  // test for id getter (changed to include db)
   @Test
-  public void getId_returnsId_0() {
-    Stoner stoner = new Stoner("Creed", "OG Kush");
-    assertEquals(0, stoner.getId());
+  public void getId_InstantiateWithAnID() {
+    Stoner stoner = new Stoner("Dakota", "NoSql Kush");
+    stoner.save();
+    assertTrue(stoner.getId() > 0);
   }
 
   // test for favorite_strain getter
@@ -43,7 +44,18 @@ public class StonerTest {
     Stoner stoner = new Stoner("Creed", "OG Kush");
     stoner.save();
     Stoner stoner2 = new Stoner("Creed", "OG Kush");
-    assertEquals(true ,stoner.equals(stoner2));
+    stoner2.save();
+    assertEquals(stoner ,Stoner.all().get(0));
+    assertEquals(stoner2 ,Stoner.all().get(1));
+  }
+
+  // test if save is assigning unique ids
+  @Test
+  public void save_assignsIdToObject() {
+    Stoner stoner = new Stoner("Creed", "OG Kush");
+    stoner.save();
+    Stoner savedStoner = Stoner.all().get(0);
+    assertEquals(stoner.getId(), savedStoner.getId());
   }
 
   // test for all method (return List<Stoner>)
@@ -54,5 +66,26 @@ public class StonerTest {
     Stoner jessica = new Stoner("Jessica", "Purple Hindu Kush");
     jessica.save();
     assertEquals(2, Stoner.all().size());
+  }
+
+  // test for find method (pass Id and return correct Stoner)
+  // we create two Stoner instances to check
+  @Test
+  public void find_returnsStonerWithSameId_josh() {
+    Stoner chris = new Stoner("Chris", "Bubble Kush");
+    chris.save();
+    Stoner josh = new Stoner("Josh", "JJ Cumber");
+    josh.save();
+    assertEquals(josh, Stoner.find(josh.getId()));
+  }
+
+  // test for delete method (pass id and delete entry)
+  @Test
+  public void delete_removesStonerWithSameId() {
+    Stoner jake = new Stoner("Jake", "Bean Dip");
+    jake.save();
+    int jakeId = jake.getId();
+    jake.delete();
+    assertEquals(null, Stoner.find(jakeId));
   }
 }
