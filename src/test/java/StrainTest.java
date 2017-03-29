@@ -2,7 +2,7 @@ import org.sql2o.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class WeedTest {
+public class StrainTest {
 
   @Before
   public void setUp() {
