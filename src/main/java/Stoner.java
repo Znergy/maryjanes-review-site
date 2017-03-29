@@ -1,4 +1,5 @@
 import org.sql2o.*;
+import java.util.*;
 
 public class Stoner {
   private int id;
@@ -21,7 +22,7 @@ public class Stoner {
   public int getId() {
     return this.id;
   }
-  
+
   @Override
   public boolean equals(Object object) {
     if(!(object instanceof Stoner)) {
@@ -39,6 +40,13 @@ public class Stoner {
       .addParameter("name", this.name)
       .addParameter("favorite_strain", this.favorite_strain)
       .executeUpdate();
+    }
+  }
+
+  public static List<Stoner> all() {
+    String sql = "SELECT id, name, favorite_strain FROM stoners;";
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery(sql).executeAndFetch(Stoner.class);
     }
   }
 
