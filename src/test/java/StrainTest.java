@@ -8,4 +8,9 @@ public class StrainTest {
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
+  @Test
+  public void constructor_createsStrainObject_true() {
+    Strain sativa = new Strain("Sativa", 1);
+    assertEquals(true, sativa instanceof Strain);
+  }
 }

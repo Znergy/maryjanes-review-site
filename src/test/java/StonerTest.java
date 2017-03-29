@@ -88,4 +88,22 @@ public class StonerTest {
     jake.delete();
     assertEquals(null, Stoner.find(jakeId));
   }
+
+  // test for updating name
+  @Test
+  public void update_updatesStonerName() {
+    Stoner stoner = new Stoner("Ryan", "OG Kush");
+    stoner.save();
+    stoner.updateName("Tyler");
+    assertEquals("Tyler", Stoner.find(stoner.getId()).getName());
+  }
+
+  // test for updating strain
+  @Test
+  public void update_updatesStonerFavoriteStrain() {
+    Stoner stoner = new Stoner("Jacob", "Black Knight");
+    stoner.save();
+    stoner.updateFavoriteStrain("Forest, Forest Gump");
+    assertEquals("Forest, Forest Gump", Stoner.find(stoner.getId()).getFavoriteStrain());
+  }
 }
