@@ -29,17 +29,19 @@ public class Stoner {
       return false;
     } else {
       Stoner stoner = (Stoner) object;
-      return this.getName().equals(stoner.getName()) && this.getFavoriteStrain().equals(stoner.getFavoriteStrain());
+      return this.getName().equals(stoner.getName()) && this.getFavoriteStrain().equals(stoner.getFavoriteStrain())
+      && this.getId() == stoner.getId();
     }
   }
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO stoners (name, favorite_strain) VALUES (:name, :favorite_strain);";
-      con.createQuery(sql)
+      this.id = (int) con.createQuery(sql, true)
       .addParameter("name", this.name)
       .addParameter("favorite_strain", this.favorite_strain)
-      .executeUpdate();
+      .executeUpdate()
+      .getKey();
     }
   }
 
@@ -50,6 +52,24 @@ public class Stoner {
     }
   }
 
+  public static Stoner find(int id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM stoners WHERE id = :id;";
+      Stoner stoner = con.createQuery(sql)
+      .addParameter("id", id)
+      .executeAndFetchFirst(Stoner.class);
+      return stoner;
+    }
+  }
+
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM stoners WHERE id = :id;";
+      con.createQuery(sql)
+      .addParameter("id", id)
+      .executeUpdate();
+    }
+  }
 
 
 }
